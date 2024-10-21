@@ -1,2 +1,2 @@
 # Betle-Care
-Mobie App for Betle farmers in S ri-Lanka
+Mobie App for Betle farmers in Sri-Lanka
