@@ -1,4 +1,7 @@
+import 'package:betlecare/pages/land_measurement_screen.dart';
+import 'package:betlecare/pages/manual_land_measurement_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +19,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LandMeasurementScreen(),
+      // home: ManualLandMeasurementPage(),
     );
   }
 }
