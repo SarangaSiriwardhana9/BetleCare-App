@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../widgets/bottom_nav_bar.dart';
+import '../../widgets/profile_header.dart';
+import 'land_main_screen.dart';
 
 class HarvestScreen extends StatelessWidget {
   const HarvestScreen({super.key});
@@ -13,49 +16,81 @@ class HarvestScreen extends StatelessWidget {
             _buildCard(
               title: 'ඵලදාව පිළිබඳ\nඅනාවැකි',
               color: Colors.green.shade100,
-              icon: Icons.eco,
+              imagePath: 'assets/images/eshan/LM1.png',
               gradient: LinearGradient(
                 colors: [
                   Colors.green.shade50,
                   Colors.green.shade100,
                 ],
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChildPageWrapper(child: LandMainScreen()),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 16),
             _buildCard(
-              title: 'ඉඩම් කොටස\n මැනීම හා විස්තර ',
+              title: 'ඉඩම් කොටස\n මැනීම හා විස්තර',
               color: Colors.purple.shade100,
-              icon: Icons.location_on,
+              imagePath: 'assets/images/eshan/LM2.png',
               gradient: LinearGradient(
                 colors: [
                   Colors.purple.shade50,
                   Colors.purple.shade100,
                 ],
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChildPageWrapper(child: LandMainScreen()),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 16),
             _buildCard(
               title: 'කොළ ප්‍රමාණ\nපරිවර්තනය',
               color: Colors.blue.shade100,
-              icon: Icons.calculate,
+              imagePath: 'assets/images/eshan/LM3.png',
               gradient: LinearGradient(
                 colors: [
                   Colors.blue.shade50,
                   Colors.blue.shade100,
                 ],
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChildPageWrapper(child: LandMainScreen()),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 16),
             _buildCard(
-              title: 'අස්වැන්න පිළිබඳ \nසාරාංශය  ',
+              title: 'අස්වැන්න පිළිබඳ \nසාරාංශය',
               color: Colors.amber.shade100,
-              icon: Icons.bar_chart,
+              imagePath: 'assets/images/eshan/LM4.png',
               gradient: LinearGradient(
                 colors: [
                   Colors.amber.shade50,
                   Colors.amber.shade100,
                 ],
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChildPageWrapper(child: LandMainScreen()),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -66,8 +101,9 @@ class HarvestScreen extends StatelessWidget {
   Widget _buildCard({
     required String title,
     required Color color,
-    required IconData icon,
+    required String imagePath, // Accept image path
     required Gradient gradient,
+    required Function()? onTap,
   }) {
     return Container(
       width: double.infinity,
@@ -87,33 +123,35 @@ class HarvestScreen extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: () {},
+          onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: color.withGreen(color.green + 40),
-                    size: 28,
+                  width: 160, // Set the container size to match the image size
+                  height: 160, // Set the container size to match the image size
+                  child: Center(
+                    child: Image.asset(
+                      imagePath, // Use the image path
+                      width: 160, // Set the image width
+                      height: 160, // Set the image height
+                      fit: BoxFit.contain, // Ensure the image fits without distortion
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[800],
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
+                  child: Center(
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center, // Ensure text alignment is centered
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey[800],
+                        fontWeight: FontWeight.w600,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                 ),
@@ -121,6 +159,30 @@ class HarvestScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ChildPageWrapper extends StatelessWidget {
+  final Widget child;
+
+  const ChildPageWrapper({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          ProfileHeader(), // Keep the header
+          Expanded(child: child), // Render the child page
+        ],
+      ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: 0, // Or manage index based on the navigation
+        onTabChange: (index) {
+          Navigator.pop(context); // Navigate back to main
+        },
       ),
     );
   }

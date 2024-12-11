@@ -1,5 +1,5 @@
-import 'package:betlecare/pages/harvest/harvest_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:betlecare/pages/harvest/harvest_screen.dart';
 import 'package:betlecare/pages/home_screen.dart';
 import 'package:betlecare/pages/profile_screen.dart';
 import 'package:betlecare/pages/splash_screen.dart';
@@ -28,6 +28,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
+  // List of screens to navigate between
   final List<Widget> _screens = [
     HarvestScreen(),
     ProfileScreen(),
@@ -36,6 +37,7 @@ class _MainPageState extends State<MainPage> {
     ProfileScreen(),
   ];
 
+  // Function to handle tab changes
   void _onTabChange(int index) {
     setState(() {
       _selectedIndex = index;
@@ -47,9 +49,9 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: Column(
         children: [
-          ProfileHeader(), // Add the ProfileHeader here
+          ProfileHeader(), // ProfileHeader is fixed at the top
           Expanded(
-            child: _screens[_selectedIndex],
+            child: _screens[_selectedIndex], // Dynamic content based on selected tab
           ),
         ],
       ),
@@ -60,4 +62,3 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
-
