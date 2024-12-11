@@ -20,31 +20,42 @@ class BottomNavBar extends StatelessWidget {
           activeColor: Colors.green[800]!,
           tabBackgroundColor: Colors.green[100]!,
           tabBorderRadius: 15,
+          duration: Duration(milliseconds: 300), // Animation duration
+          curve: Curves.easeInOut, // Animation curve
           tabs: [
             GButton(
               icon: LineIcons.leaf,
               iconActiveColor: Colors.green[800],
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              text: 'Harvest',
             ),
             GButton(
               icon: LineIcons.dollarSign,
               iconActiveColor: Colors.green[800],
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              text: 'Finance',
             ),
             GButton(
               icon: LineIcons.home,
               iconActiveColor: Colors.green[800],
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              text: 'Home',
             ),
             GButton(
               icon: LineIcons.bug,
               iconActiveColor: Colors.green[800],
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              text: 'Pests',
             ),
             GButton(
               icon: LineIcons.cloud,
               iconActiveColor: Colors.green[800],
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              text: 'Weather',
             )
           ],
           selectedIndex: selectedIndex,
           onTabChange: onTabChange,
-          iconSize: selectedIndex == selectedIndex ? 28 : 24,
         ),
       ),
     );
