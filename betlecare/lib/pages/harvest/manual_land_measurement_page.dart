@@ -17,11 +17,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
   int _polygonIdCounter = 1;
   int _markerIdCounter = 1;
   double? _area;
-
-  static final CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  LatLng? _currentLocation; // Holds the user's current location
 
   @override
   void initState() {
@@ -29,7 +25,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
     _getUserLocation();
   }
 
-  void _getUserLocation() async {
+  Future<void> _getUserLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -60,18 +56,34 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
     }
 
     Position position = await Geolocator.getCurrentPosition();
-    _mapController?.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: LatLng(position.latitude, position.longitude),
-          zoom: 18,
+    _currentLocation = LatLng(position.latitude, position.longitude);
+
+    if (_mapController != null) {
+      _mapController?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: _currentLocation!,
+            zoom: 18,
+          ),
         ),
-      ),
-    );
+      );
+    }
+
+    setState(() {});
   }
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+    if (_currentLocation != null) {
+      _mapController?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: _currentLocation!,
+            zoom: 18,
+          ),
+        ),
+      );
+    }
   }
 
   void _addMarker(LatLng pos) {
@@ -143,7 +155,10 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
-            initialCameraPosition: _initialPosition,
+            initialCameraPosition: CameraPosition(
+              target: _currentLocation ?? LatLng(0, 0), // Default if location is null
+              zoom: 14.4746,
+            ),
             markers: _markers,
             polygons: _polygons,
             onTap: _addMarker,
@@ -187,8 +202,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                         ),
-                      ),
-                    ),
+                      ),                    ),
                   ],
                 ),
               ],
@@ -199,4 +213,3 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
     );
   }
 }
-

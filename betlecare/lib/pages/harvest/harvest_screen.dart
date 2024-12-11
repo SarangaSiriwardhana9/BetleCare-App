@@ -174,14 +174,14 @@ class ChildPageWrapper extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          ProfileHeader(), // Keep the header
-          Expanded(child: child), // Render the child page
+          ProfileHeader(),
+          Expanded(child: child),
         ],
       ),
       bottomNavigationBar: BottomNavBar(
-        selectedIndex: 0, // Or manage index based on the navigation
+        selectedIndex: 0,
         onTabChange: (index) {
-          Navigator.pop(context); // Navigate back to main
+          Navigator.pop(context);
         },
       ),
     );
