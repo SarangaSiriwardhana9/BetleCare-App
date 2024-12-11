@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:betlecare/pages/home_screen.dart';
 import 'package:betlecare/pages/profile_screen.dart';
 import 'package:betlecare/pages/splash_screen.dart';
 import 'package:betlecare/widgets/bottom_nav_bar.dart';
-import 'package:flutter/material.dart';
+import 'package:betlecare/widgets/profile_header.dart'; // Import the ProfileHeader
 
 void main() {
   runApp(MyApp());
@@ -29,7 +30,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _screens = [
     HomeScreen(),
     ProfileScreen(),
-    ProfileScreen(),
+    HomeScreen(),
     ProfileScreen(),
     ProfileScreen(),
   ];
@@ -43,7 +44,14 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: Column(
+        children: [
+          ProfileHeader(), // Add the ProfileHeader here
+          Expanded(
+            child: _screens[_selectedIndex],
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
         onTabChange: _onTabChange,
@@ -51,3 +59,4 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
