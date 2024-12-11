@@ -68,7 +68,6 @@ class ProfileHeader extends StatelessWidget {
                   icon: const Icon(LineIcons.search, color: Colors.black87),
                   onPressed: () {},
                 ),
-                // Bell icon with red badge
                 badges.Badge(
                   position: badges.BadgePosition.topEnd(top: -10, end: 0),
                   badgeContent: const Text(

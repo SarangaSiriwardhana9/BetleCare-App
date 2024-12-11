@@ -1,9 +1,10 @@
+import 'package:betlecare/pages/harvest/harvest_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:betlecare/pages/home_screen.dart';
 import 'package:betlecare/pages/profile_screen.dart';
 import 'package:betlecare/pages/splash_screen.dart';
 import 'package:betlecare/widgets/bottom_nav_bar.dart';
-import 'package:betlecare/widgets/profile_header.dart'; // Import the ProfileHeader
+import 'package:betlecare/widgets/profile_header.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,7 +29,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
+    HarvestScreen(),
     ProfileScreen(),
     HomeScreen(),
     ProfileScreen(),
