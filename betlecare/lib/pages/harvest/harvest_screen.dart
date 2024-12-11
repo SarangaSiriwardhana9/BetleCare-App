@@ -11,7 +11,7 @@ class HarvestScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildCard(
-              title: 'එළවළු පිළිබඳ තොරතුරු',
+              title: 'ඵලදාව පිළිබඳ\nඅනාවැකි',
               color: Colors.green.shade100,
               icon: Icons.eco,
               gradient: LinearGradient(
@@ -23,7 +23,7 @@ class HarvestScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             _buildCard(
-              title: 'ඉඩම් තොරතුරු\nබැලීම හා වීඩියෝ',
+              title: 'ඉඩම් කොටස\n මැනීම හා විස්තර ',
               color: Colors.purple.shade100,
               icon: Icons.location_on,
               gradient: LinearGradient(
@@ -35,7 +35,7 @@ class HarvestScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             _buildCard(
-              title: 'කොළ ප්‍රමාණය\nපරිවර්තනය',
+              title: 'කොළ ප්‍රමාණ\nපරිවර්තනය',
               color: Colors.blue.shade100,
               icon: Icons.calculate,
               gradient: LinearGradient(
@@ -47,7 +47,7 @@ class HarvestScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             _buildCard(
-              title: 'අස්වැන්න පිළිබඳ\nසාරාංශය',
+              title: 'අස්වැන්න පිළිබඳ \nසාරාංශය  ',
               color: Colors.amber.shade100,
               icon: Icons.bar_chart,
               gradient: LinearGradient(
@@ -71,7 +71,7 @@ class HarvestScreen extends StatelessWidget {
   }) {
     return Container(
       width: double.infinity,
-      height: 150,
+      height: 180,
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(16),
