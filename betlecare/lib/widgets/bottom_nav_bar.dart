@@ -20,8 +20,8 @@ class BottomNavBar extends StatelessWidget {
           activeColor: Colors.green[800]!,
           tabBackgroundColor: Colors.green[100]!,
           tabBorderRadius: 15,
-          duration: Duration(milliseconds: 300), // Animation duration
-          curve: Curves.easeInOut, // Animation curve
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
           tabs: [
             GButton(
               icon: LineIcons.leaf,
