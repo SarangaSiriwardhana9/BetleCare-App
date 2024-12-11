@@ -170,7 +170,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
       body: GoogleMap(
         onMapCreated: (controller) => _mapController = controller,
         initialCameraPosition: CameraPosition(
-          target: LatLng(0, 0), // This will be updated once we get the user's location
+          target: LatLng(0, 0),
           zoom: 18,
         ),
         myLocationEnabled: true,
@@ -180,6 +180,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isRecording ? _stopRecording : _startRecording,
+        backgroundColor: Colors.green[100]!,
         icon: Icon(_isRecording ? Icons.stop : Icons.play_arrow),
         label: Text(_isRecording ? 'Stop' : 'Start'),
       ),
