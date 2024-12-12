@@ -18,7 +18,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
   int _polygonIdCounter = 1;
   int _markerIdCounter = 1;
   double? _area;
-  LatLng? _currentLocation; // Holds the user's current location
+  LatLng? _currentLocation;
 
   @override
   void initState() {
@@ -131,6 +131,8 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
           (_polygonPoints[j].latitude * _polygonPoints[i].longitude);
     }
     area = (area.abs() * 111319.9 * 111319.9) / 2; // Convert to square meters
+    //convert in to acres
+    area = area / 4046.86;
 
     setState(() {
       _area = area;
@@ -155,7 +157,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
           GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: _currentLocation ?? LatLng(0, 0), // Default if location is null
+              target: _currentLocation ?? LatLng(0, 0),
               zoom: 14.4746,
             ),
             markers: _markers,
@@ -167,48 +169,43 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
           Positioned(
             bottom: 16,
             left: 16,
-            right: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (_area != null)
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Calculated Area: ${_area!.toStringAsFixed(2)} sq meters',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _calculateArea,
-                        child: Text('Calculate Area'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _resetMeasurement,
-                        child: Text('Reset'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                        ),
-                      ),                    ),
-                  ],
+            right: 72, // Adjusted to make space for FABs
+            child: _area != null
+                ? Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Calculated Area: ${_area!.toStringAsFixed(2)} Acres',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ],
-            ),
+              ),
+            )
+                : SizedBox.shrink(),
           ),
         ],
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 20.0, bottom: 100.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: _calculateArea,
+              child: Icon(Icons.calculate),
+              backgroundColor: Colors.blue[100]!,
+              heroTag: 'calculate',
+            ),
+            const SizedBox(height: 16),
+            FloatingActionButton(
+              onPressed: _resetMeasurement,
+              child: Icon(Icons.refresh),
+              backgroundColor: Colors.green[100]!,
+              heroTag: 'reset',
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+

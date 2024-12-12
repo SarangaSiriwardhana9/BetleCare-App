@@ -179,11 +179,19 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
         polygons: _polygons,
         polylines: _polylines,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _isRecording ? _stopRecording : _startRecording,
-        backgroundColor: Colors.green[100]!,
-        icon: Icon(_isRecording ? Icons.stop : Icons.play_arrow),
-        label: Text(_isRecording ? 'Stop' : 'Start'),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 20.0, bottom: 100.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: _isRecording ? _stopRecording : _startRecording,
+              backgroundColor: (_isRecording ? Colors.red[100]! : Colors.green[100]!),
+              child: Icon(_isRecording ? Icons.stop : Icons.play_arrow),
+              heroTag: Text(_isRecording ? 'Stop' : 'Start'),
+            ),
+          ],
+        ),
       ),
     );
   }
