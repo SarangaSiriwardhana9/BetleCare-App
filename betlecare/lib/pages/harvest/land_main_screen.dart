@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../widgets/appbar/app_bar.dart';
 import 'harvest_screen.dart';
 import 'land_measurement_screen.dart';
 import 'manual_land_measurement_page.dart';
@@ -10,73 +12,57 @@ class LandMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  _buildCard(
-                    title: 'සිතියම මත පදනම්\n වූ ඉඩම් මැනීම',
-                    color: Colors.blue.shade100,
-                    imagePath: 'assets/images/eshan/LM5.png',
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blue.shade50,
-                        Colors.blue.shade100,
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChildPageWrapper(
-                            child: ManualLandMeasurementPage(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _buildCard(
-                    title: 'GPS මත පදනම්\n වූ ඉඩම් මැනීම',
-                    color: Colors.purple.shade100,
-                    imagePath: 'assets/images/eshan/LM6.png',
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.purple.shade50,
-                        Colors.purple.shade100,
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChildPageWrapper(
-                            child: LandMeasurementScreen(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
+      appBar: const BasicAppbar(), // Use the custom BasicAppbar here
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildCard(
+              title: 'සිතියම මත පදනම්\n වූ ඉඩම් මැනීම',
+              color: Colors.blue.shade100,
+              imagePath: 'assets/images/eshan/LM5.png',
+              gradient: LinearGradient(
+                colors: [
+                  Colors.blue.shade50,
+                  Colors.blue.shade100,
                 ],
               ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 16,
-            child: FloatingActionButton(
-              onPressed: () {
-                Navigator.pop(context); // Navigate back when the button is pressed
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChildPageWrapper(
+                      child: ManualLandMeasurementPage(),
+                    ),
+                  ),
+                );
               },
-              backgroundColor: Colors.green[100]!,
-              child: const Icon(Icons.arrow_back), // Back icon for FAB
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            _buildCard(
+              title: 'GPS මත පදනම්\n වූ ඉඩම් මැනීම',
+              color: Colors.purple.shade100,
+              imagePath: 'assets/images/eshan/LM6.png',
+              gradient: LinearGradient(
+                colors: [
+                  Colors.purple.shade50,
+                  Colors.purple.shade100,
+                ],
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChildPageWrapper(
+                      child: LandMeasurementScreen(),
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }

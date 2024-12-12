@@ -1,3 +1,4 @@
+import 'package:betlecare/widgets/appbar/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -148,9 +149,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Manual Land Measurement'),
-      ),
+      appBar: BasicAppbar(),
       body: Stack(
         children: [
           GoogleMap(

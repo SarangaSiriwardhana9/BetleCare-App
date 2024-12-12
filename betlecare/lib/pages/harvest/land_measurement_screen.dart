@@ -1,3 +1,4 @@
+import 'package:betlecare/widgets/appbar/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -166,7 +167,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Land Measurement')),
+      appBar: BasicAppbar(),
       body: GoogleMap(
         onMapCreated: (controller) => _mapController = controller,
         initialCameraPosition: CameraPosition(
