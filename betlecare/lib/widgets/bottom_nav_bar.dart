@@ -6,7 +6,7 @@ class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onTabChange;
 
-  BottomNavBar({required this.selectedIndex, required this.onTabChange});
+  const BottomNavBar({super.key, required this.selectedIndex, required this.onTabChange});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
           activeColor: Colors.green[800]!,
           tabBackgroundColor: Colors.green[100]!,
           tabBorderRadius: 15,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
           tabs: [
             GButton(

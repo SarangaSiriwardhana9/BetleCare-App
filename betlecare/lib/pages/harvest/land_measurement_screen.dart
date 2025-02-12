@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
-import 'dart:math';
 
 class LandMeasurementScreen extends StatefulWidget {
+  const LandMeasurementScreen({super.key});
+
   @override
   _LandMeasurementScreenState createState() => _LandMeasurementScreenState();
 }
 
 class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
   GoogleMapController? _mapController;
-  List<LatLng> _polygonPoints = [];
-  Set<Polygon> _polygons = {};
-  Set<Polyline> _polylines = {};
+  final List<LatLng> _polygonPoints = [];
+  final Set<Polygon> _polygons = {};
+  final Set<Polyline> _polylines = {};
   bool _isRecording = false;
   StreamSubscription<Position>? _positionStreamSubscription;
 
@@ -33,7 +34,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Location services are disabled. Please enable the services')),
+        const SnackBar(content: Text('Location services are disabled. Please enable the services')),
       );
       return;
     }
@@ -43,7 +44,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Location permissions are denied')),
+          const SnackBar(content: Text('Location permissions are denied')),
         );
         return;
       }
@@ -51,7 +52,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
 
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')),
+        const SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')),
       );
       return;
     }
@@ -63,7 +64,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
     } catch (e) {
       print("Error getting current position: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to get current location. Please try again.')),
+        const SnackBar(content: Text('Failed to get current location. Please try again.')),
       );
     }
   }
@@ -88,7 +89,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
     });
 
     _positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(
+      locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 5,
       ),
@@ -114,7 +115,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
     _polygons.clear();
     if (_polygonPoints.length >= 3) {
       _polygons.add(Polygon(
-        polygonId: PolygonId('land'),
+        polygonId: const PolygonId('land'),
         points: _polygonPoints,
         strokeWidth: 2,
         strokeColor: Colors.red,
@@ -126,7 +127,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
   void _updatePolyline() {
     _polylines.clear();
     _polylines.add(Polyline(
-      polylineId: PolylineId('landBoundary'),
+      polylineId: const PolylineId('landBoundary'),
       points: _polygonPoints,
       color: Colors.blue,
       width: 3,
@@ -136,7 +137,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
   void _calculateArea() {
     if (_polygonPoints.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Not enough points to calculate area. Please walk around the entire perimeter.')),
+        const SnackBar(content: Text('Not enough points to calculate area. Please walk around the entire perimeter.')),
       );
       return;
     }
@@ -152,12 +153,12 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Land Area'),
+        title: const Text('Land Area'),
         content: Text('The measured land area is approximately ${area.toStringAsFixed(2)} square meters.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -167,10 +168,10 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BasicAppbar(),
+      appBar: const BasicAppbar(),
       body: GoogleMap(
         onMapCreated: (controller) => _mapController = controller,
-        initialCameraPosition: CameraPosition(
+        initialCameraPosition: const CameraPosition(
           target: LatLng(0, 0),
           zoom: 18,
         ),
@@ -187,8 +188,8 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
             FloatingActionButton(
               onPressed: _isRecording ? _stopRecording : _startRecording,
               backgroundColor: (_isRecording ? Colors.red[100]! : Colors.green[100]!),
-              child: Icon(_isRecording ? Icons.stop : Icons.play_arrow),
               heroTag: Text(_isRecording ? 'Stop' : 'Start'),
+              child: Icon(_isRecording ? Icons.stop : Icons.play_arrow),
             ),
           ],
         ),

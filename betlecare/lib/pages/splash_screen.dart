@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:betlecare/main.dart';
+import 'package:betlecare/pages/login_page.dart';
+import 'package:betlecare/supabase_client.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -13,12 +16,27 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Delay for 5 seconds, then navigate to the MainPage
-    Future.delayed(Duration(seconds: 5), () {
+    _checkAuthAndNavigate();
+  }
+
+  Future<void> _checkAuthAndNavigate() async {
+    // Delay for 5 seconds to show the animation
+    await Future.delayed(const Duration(seconds: 5));
+
+    if (!mounted) return;
+
+    final supabase = await SupabaseClientManager.instance;
+    final user = supabase.client.auth.currentUser;
+
+    if (user != null) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => MainPage()),
+        MaterialPageRoute(builder: (context) => const MainPage()),
       );
-    });
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    }
   }
 
   @override
@@ -35,6 +53,8 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 300,
               height: 250,
             ),
+            const SizedBox(height: 20),
+            const CircularProgressIndicator(),
           ],
         ),
       ),

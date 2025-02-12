@@ -17,11 +17,14 @@ class ProfileHeader extends StatelessWidget {
             Expanded(
               child: Row(
                 children: [
-                  // Avatar
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.grey[200],
-                    backgroundImage: const AssetImage('assets/images/profile.png'),
+                  // Avatar (now a button to open the drawer)
+                  GestureDetector(
+                    onTap: () => Scaffold.of(context).openDrawer(),
+                    child: CircleAvatar(
+                      radius: 24,
+                      backgroundColor: Colors.grey[200],
+                      backgroundImage: const AssetImage('assets/images/profile.png'),
+                    ),
                   ),
                   const SizedBox(width: 12),
                   // Text section
@@ -78,15 +81,15 @@ class ProfileHeader extends StatelessWidget {
                       fontSize: 15,
                     ),
                   ),
-                  badgeAnimation: badges.BadgeAnimation.scale(
+                  badgeAnimation: const badges.BadgeAnimation.scale(
                     animationDuration: Duration(seconds: 1),
                     colorChangeAnimationDuration: Duration(seconds: 1),
                     loopAnimation: false,
                   ),
                   badgeStyle: badges.BadgeStyle(
                     shape: badges.BadgeShape.circle,
-                    badgeColor:  Colors.red,
-                    padding: EdgeInsets.all(8),
+                    badgeColor: Colors.red,
+                    padding: const EdgeInsets.all(8),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: IconButton(
@@ -102,3 +105,4 @@ class ProfileHeader extends StatelessWidget {
     );
   }
 }
+

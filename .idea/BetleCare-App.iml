@@ -11,6 +11,8 @@
       <excludeFolder url="file://$MODULE_DIR$/betlecare/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/betlecare/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/betlecare/build" />
+      <excludeFolder url="file://$MODULE_DIR$/betlecare/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/betlecare/android/.gradle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

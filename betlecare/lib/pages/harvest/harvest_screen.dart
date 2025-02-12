@@ -27,7 +27,7 @@ class HarvestScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(child: LandMainScreen()),
+                    builder: (context) => const ChildPageWrapper(child: LandMainScreen()),
                   ),
                 );
               },
@@ -47,7 +47,7 @@ class HarvestScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(child: LandMainScreen()),
+                    builder: (context) => const ChildPageWrapper(child: LandMainScreen()),
                   ),
                 );
               },
@@ -67,7 +67,7 @@ class HarvestScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(child: LandMainScreen()),
+                    builder: (context) => const ChildPageWrapper(child: LandMainScreen()),
                   ),
                 );
               },
@@ -87,7 +87,7 @@ class HarvestScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(child: LandMainScreen()),
+                    builder: (context) => const ChildPageWrapper(child: LandMainScreen()),
                   ),
                 );
               },
@@ -128,7 +128,7 @@ class HarvestScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Container(
+                SizedBox(
                   width: 160, // Set the container size to match the image size
                   height: 160, // Set the container size to match the image size
                   child: Center(
@@ -174,7 +174,7 @@ class ChildPageWrapper extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          ProfileHeader(),
+          const ProfileHeader(),
           Expanded(child: child),
         ],
       ),

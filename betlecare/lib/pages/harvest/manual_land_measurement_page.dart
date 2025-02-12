@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
-import 'dart:math';
 
 class ManualLandMeasurementPage extends StatefulWidget {
+  const ManualLandMeasurementPage({super.key});
+
   @override
   _ManualLandMeasurementPageState createState() => _ManualLandMeasurementPageState();
 }
 
 class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
   GoogleMapController? _mapController;
-  Set<Marker> _markers = {};
-  Set<Polygon> _polygons = {};
-  List<LatLng> _polygonPoints = [];
-  int _polygonIdCounter = 1;
+  final Set<Marker> _markers = {};
+  final Set<Polygon> _polygons = {};
+  final List<LatLng> _polygonPoints = [];
+  final int _polygonIdCounter = 1;
   int _markerIdCounter = 1;
   double? _area;
   LatLng? _currentLocation;
@@ -33,7 +34,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Location services are disabled. Please enable the services')),
+        const SnackBar(content: Text('Location services are disabled. Please enable the services')),
       );
       return;
     }
@@ -43,7 +44,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Location permissions are denied')),
+          const SnackBar(content: Text('Location permissions are denied')),
         );
         return;
       }
@@ -51,7 +52,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
 
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')),
+        const SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')),
       );
       return;
     }
@@ -119,7 +120,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
   void _calculateArea() {
     if (_polygonPoints.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select at least 3 points to calculate the area.')),
+        const SnackBar(content: Text('Please select at least 3 points to calculate the area.')),
       );
       return;
     }
@@ -151,13 +152,13 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BasicAppbar(),
+      appBar: const BasicAppbar(),
       body: Stack(
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: _currentLocation ?? LatLng(0, 0),
+              target: _currentLocation ?? const LatLng(0, 0),
               zoom: 14.4746,
             ),
             markers: _markers,
@@ -176,11 +177,11 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Calculated Area: ${_area!.toStringAsFixed(2)} Acres',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             )
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
           ),
         ],
       ),
@@ -191,16 +192,16 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
           children: [
             FloatingActionButton(
               onPressed: _calculateArea,
-              child: Icon(Icons.calculate),
               backgroundColor: Colors.blue[100]!,
               heroTag: 'calculate',
+              child: const Icon(Icons.calculate),
             ),
             const SizedBox(height: 16),
             FloatingActionButton(
               onPressed: _resetMeasurement,
-              child: Icon(Icons.refresh),
               backgroundColor: Colors.green[100]!,
               heroTag: 'reset',
+              child: const Icon(Icons.refresh),
             ),
           ],
         ),

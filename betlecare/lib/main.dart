@@ -1,26 +1,73 @@
+import 'package:betlecare/pages/sidebar_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:betlecare/pages/harvest/harvest_screen.dart';
 import 'package:betlecare/pages/home_screen.dart';
 import 'package:betlecare/pages/profile_screen.dart';
 import 'package:betlecare/pages/splash_screen.dart';
 import 'package:betlecare/widgets/bottom_nav_bar.dart';
 import 'package:betlecare/widgets/profile_header.dart';
+import 'package:betlecare/pages/login_page.dart';
+import 'package:betlecare/pages/signup_page.dart';
+import 'package:betlecare/supabase_client.dart';
+import 'package:line_icons/line_icons.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SupabaseClientManager.instance;
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthState();
+  }
+
+  Future<void> _checkAuthState() async {
+    await Future.delayed(const Duration(seconds: 2)); // Simulating splash delay
+
+    final session = Supabase.instance.client.auth.currentSession;
+
+    if (session != null) {
+      // User is already logged in, navigate to main
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed('/main');
+      });
+    } else {
+      // No session found, navigate to login
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed('/login');
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      initialRoute: '/splash',
+      routes: {
+        '/splash': (context) => const SplashScreen(),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
+        '/main': (context) => const MainPage(),
+      },
     );
   }
 }
 
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -28,30 +75,44 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 2;
 
-  // List of screens to navigate between
   final List<Widget> _screens = [
-    HarvestScreen(),
-    ProfileScreen(),
-    HomeScreen(),
-    ProfileScreen(),
-    ProfileScreen(),
+    const HarvestScreen(),
+    const ProfileScreen(),
+    const HomeScreen(),
+    const ProfileScreen(),
+    const ProfileScreen(),
   ];
 
-  // Function to handle tab changes
   void _onTabChange(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  Future<void> _logout(BuildContext context) async {
+    try {
+      final supabase = await SupabaseClientManager.instance;
+      await supabase.client.auth.signOut();
+      Navigator.of(context).pushReplacementNamed('/login');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error logging out: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SidebarMenu(
+        onTabChange: _onTabChange,
+        onLogout: _logout,
+      ),
       body: Column(
         children: [
-          ProfileHeader(), // ProfileHeader is fixed at the top
+          const ProfileHeader(),
           Expanded(
-            child: _screens[_selectedIndex], // Dynamic content based on selected tab
+            child: _screens[_selectedIndex],
           ),
         ],
       ),
@@ -62,3 +123,4 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+

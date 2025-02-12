@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/appbar/app_bar.dart';
@@ -31,7 +30,7 @@ class LandMainScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(
+                    builder: (context) => const ChildPageWrapper(
                       child: ManualLandMeasurementPage(),
                     ),
                   ),
@@ -53,7 +52,7 @@ class LandMainScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(
+                    builder: (context) => const ChildPageWrapper(
                       child: LandMeasurementScreen(),
                     ),
                   ),
