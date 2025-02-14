@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../supabase_client.dart';
 import '../styles/auth_styles.dart';
 
@@ -36,8 +37,6 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
 
-      print(response);
-
       if (response.user != null) {
         Navigator.of(context).pushReplacementNamed('/main');
       } else {
@@ -53,7 +52,6 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _errorMessage = 'An unexpected error occurred: ${e.toString()}';
       });
-      print(e.toString());
     } finally {
       setState(() {
         _isLoading = false;
@@ -61,27 +59,47 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _signInWithGoogle() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = '';
-    });
+  Future<void> _nativeGoogleSignIn() async {
+    const clientId = '973570141465-qnd5vbsrnr98aca90lru6gsimbg21ngb.apps.googleusercontent.com';
+    const webClientId = '973570141465-0f8s4rehfv4lvtgpit6ebop0m98unlvq.apps.googleusercontent.com';
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      clientId: clientId,
+      serverClientId: webClientId,
+    );
+
     try {
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        throw 'Google Sign-In aborted';
+      }
+
+      final googleAuth = await googleUser.authentication;
+      final idToken = googleAuth.idToken;
+      final accessToken = googleAuth.accessToken;
+
+      if (idToken == null || accessToken == null) {
+        throw 'Google authentication failed. No access token or ID token found.';
+      }
+
       final supabase = await SupabaseClientManager.instance;
-      final response = await supabase.client.auth.signInWithOAuth(
-        OAuthProvider.google,
-        redirectTo: 'io.supabase.flutterquickstart://login-callback/',
+      final response = await supabase.client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
       );
 
-      if (!response) {
+      if (response.user != null) {
+        Navigator.of(context).pushReplacementNamed('/main');
+      } else {
         setState(() {
           _errorMessage = 'Google sign-in failed. Please try again.';
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'An unexpected error occurred: ${e.toString()}';
+        _errorMessage = 'An error occurred during Google sign-in: ${e.toString()}';
       });
+      print('Error during Google sign-in: $e');
     } finally {
       setState(() {
         _isLoading = false;
@@ -152,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: _isLoading ? null : _signInWithGoogle,
+              onPressed: _isLoading ? null : _nativeGoogleSignIn,
               icon: Image.asset('assets/images/google_logo.png', height: 24),
               label: const Text('Sign In with Google'),
               style: AuthStyles.elevatedButtonStyle.copyWith(
@@ -174,4 +192,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

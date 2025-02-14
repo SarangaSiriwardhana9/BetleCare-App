@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../supabase_client.dart';
 
 class SidebarMenu extends StatelessWidget {
   final Function(int) onTabChange;
-  final Function(BuildContext) onLogout;
 
-  const SidebarMenu({
-    Key? key,
-    required this.onTabChange,
-    required this.onLogout,
-  }) : super(key: key);
+  const SidebarMenu({Key? key, required this.onTabChange}) : super(key: key);
+
+  Future<void> _logout(BuildContext context) async {
+    try {
+      final supabase = await SupabaseClientManager.instance;
+      await supabase.client.auth.signOut();
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Logout failed: ${e.toString()}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +26,35 @@ class SidebarMenu extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          UserAccountsDrawerHeader(
-            accountName: const Text('Eshan'),
-            accountEmail: const Text('eshan@example.com'),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: const AssetImage('assets/images/profile.png'),
-            ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+          DrawerHeader(
+            decoration: BoxDecoration(),
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/images/profile.png'),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Eshan',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    'eshan@example.com',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           ListTile(
@@ -32,7 +62,7 @@ class SidebarMenu extends StatelessWidget {
             title: const Text('Home'),
             onTap: () {
               Navigator.pop(context);
-              onTabChange(2); // Assuming Home is at index 2
+              onTabChange(2);
             },
           ),
           ListTile(
@@ -40,7 +70,7 @@ class SidebarMenu extends StatelessWidget {
             title: const Text('Harvest'),
             onTap: () {
               Navigator.pop(context);
-              onTabChange(0); // Assuming Harvest is at index 0
+              onTabChange(0);
             },
           ),
           ListTile(
@@ -48,21 +78,20 @@ class SidebarMenu extends StatelessWidget {
             title: const Text('Profile'),
             onTap: () {
               Navigator.pop(context);
-              onTabChange(1); // Assuming Profile is at index 1
+              onTabChange(1);
             },
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(LineIcons.alternateSignOut),
-            title: const Text('Logout'),
-            onTap: () {
-              Navigator.pop(context);
-              onLogout(context);
-            },
+            leading: const Icon(LineIcons.alternateSignOut, color: Colors.red),
+            title: const Text(
+              'Logout',
+              style: TextStyle(color: Colors.red),
+            ),
+            onTap: () => _logout(context),
           ),
         ],
       ),
     );
   }
 }
-

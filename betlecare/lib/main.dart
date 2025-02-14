@@ -93,20 +93,30 @@ class _MainPageState extends State<MainPage> {
     try {
       final supabase = await SupabaseClientManager.instance;
       await supabase.client.auth.signOut();
-      Navigator.of(context).pushReplacementNamed('/login');
+
+      // Delay to ensure session is cleared before navigating
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      if (supabase.client.auth.currentSession == null) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logout failed. Please try again.')),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error logging out: $e')),
+        SnackBar(content: Text('Logout failed: ${e.toString()}')),
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SidebarMenu(
         onTabChange: _onTabChange,
-        onLogout: _logout,
       ),
       body: Column(
         children: [
