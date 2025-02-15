@@ -17,7 +17,7 @@ class MarketsScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildCard(
-              title: 'ලභාදායී වෙළඳපොල',
+              title: 'ලභදායී වෙළඳපොල',
               color: Colors.green.shade100,
               imagePath: 'assets/images/market/store.png',
               gradient: LinearGradient(
