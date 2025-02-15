@@ -3,8 +3,8 @@ import 'package:betlecare/pages/market/market_volatility.dart';
 import 'package:betlecare/pages/market/price_forecast.dart';
 import 'package:betlecare/pages/market/profitable_market.dart';
 import 'package:flutter/material.dart';
-
-import '../harvest/harvest_screen.dart';
+import '../../widgets/bottom_nav_bar.dart';
+import '../../widgets/profile_header.dart';
 
 class MarketsScreen extends StatelessWidget {
   const MarketsScreen({super.key});
@@ -17,7 +17,7 @@ class MarketsScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildCard(
-              title: 'ලභාදායී වෙළඳපොල',
+              title: 'ලභදායී වෙළඳපොල',
               color: Colors.green.shade100,
               imagePath: 'assets/images/market/store.png',
               gradient: LinearGradient(
@@ -166,6 +166,30 @@ class MarketsScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ChildPageWrapper extends StatelessWidget {
+  final Widget child;
+
+  const ChildPageWrapper({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          const ProfileHeader(),
+          Expanded(child: child),
+        ],
+      ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: 1,
+        onTabChange: (index) {
+          Navigator.pop(context);
+        },
       ),
     );
   }
