@@ -6,7 +6,8 @@ class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onTabChange;
 
-  const BottomNavBar({super.key, required this.selectedIndex, required this.onTabChange});
+  const BottomNavBar(
+      {super.key, required this.selectedIndex, required this.onTabChange});
 
   @override
   Widget build(BuildContext context) {
@@ -26,31 +27,36 @@ class BottomNavBar extends StatelessWidget {
             GButton(
               icon: LineIcons.leaf,
               iconActiveColor: Colors.green[800],
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
               text: 'Harvest',
             ),
             GButton(
               icon: LineIcons.dollarSign,
               iconActiveColor: Colors.green[800],
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-              text: 'Finance',
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              text: 'Market',
             ),
             GButton(
               icon: LineIcons.home,
               iconActiveColor: Colors.green[800],
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
               text: 'Home',
             ),
             GButton(
               icon: LineIcons.bug,
               iconActiveColor: Colors.green[800],
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
               text: 'Pests',
             ),
             GButton(
               icon: LineIcons.cloud,
               iconActiveColor: Colors.green[800],
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
               text: 'Weather',
             )
           ],

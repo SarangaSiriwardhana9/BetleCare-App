@@ -1,3 +1,4 @@
+import 'package:betlecare/pages/market/a_market_screen.dart';
 import 'package:betlecare/pages/sidebar_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -77,7 +78,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _screens = [
     const HarvestScreen(),
-    const ProfileScreen(),
+    const MarketsScreen(),
     const HomeScreen(),
     const ProfileScreen(),
     const ProfileScreen(),
@@ -111,7 +112,6 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,4 +133,3 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
-
