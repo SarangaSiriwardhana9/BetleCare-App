@@ -12,7 +12,7 @@ import 'package:betlecare/pages/login_page.dart';
 import 'package:betlecare/pages/signup_page.dart';
 import 'package:betlecare/supabase_client.dart';
 import 'package:line_icons/line_icons.dart';
-
+import 'package:betlecare/pages/weather/weather_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseClientManager.instance;
@@ -81,7 +81,7 @@ class _MainPageState extends State<MainPage> {
     const MarketsScreen(),
     const HomeScreen(),
     const ProfileScreen(),
-    const ProfileScreen(),
+    const WeatherScreen(),
   ];
 
   void _onTabChange(int index) {
