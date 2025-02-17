@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:betlecare/main.dart';
 import 'package:betlecare/pages/login_page.dart';
 import 'package:betlecare/supabase_client.dart';
@@ -54,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 250,
             ),
             const SizedBox(height: 20),
-            const CircularProgressIndicator(),
+            CircularProgressIndicator(color: Colors.green[700]),
           ],
         ),
       ),
