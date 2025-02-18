@@ -1,3 +1,4 @@
+import 'package:betlecare/pages/harvest/land_details_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/appbar/app_bar.dart';
@@ -11,71 +12,77 @@ class LandMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppbar(), // Use the custom BasicAppbar here
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildCard(
-              title: 'සිතියම මත පදනම්\n වූ ඉඩම් මැනීම',
-              color: Colors.blue.shade100,
-              imagePath: 'assets/images/eshan/LM5.png',
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue.shade50,
-                  Colors.blue.shade100,
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ChildPageWrapper(
-                      child: ManualLandMeasurementPage(),
+      appBar: const BasicAppbar(),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    _buildCard(
+                      context: context,
+                      title: 'සිතියම මත පදනම්\n වූ ඉඩම් මැනීම',
+                      color: Colors.blue.shade100,
+                      imagePath: 'assets/images/eshan/LM5.png',
+                      gradient: LinearGradient(
+                        colors: [Colors.blue.shade50, Colors.blue.shade100],
+                      ),
+                      onTap: () => _navigateTo(context, const ManualLandMeasurementPage()),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildCard(
-              title: 'GPS මත පදනම්\n වූ ඉඩම් මැනීම',
-              color: Colors.purple.shade100,
-              imagePath: 'assets/images/eshan/LM6.png',
-              gradient: LinearGradient(
-                colors: [
-                  Colors.purple.shade50,
-                  Colors.purple.shade100,
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ChildPageWrapper(
-                      child: LandMeasurementScreen(),
+                    const SizedBox(height: 16),
+                    _buildCard(
+                      context: context,
+                      title: 'GPS මත පදනම්\n වූ ඉඩම් මැනීම',
+                      color: Colors.purple.shade100,
+                      imagePath: 'assets/images/eshan/LM6.png',
+                      gradient: LinearGradient(
+                        colors: [Colors.purple.shade50, Colors.purple.shade100],
+                      ),
+                      onTap: () => _navigateTo(context, const LandMeasurementScreen()),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-          ],
+                    const SizedBox(height: 16),
+                    _buildCard(
+                      context: context,
+                      title: 'ඉඩම් විස්තර',
+                      color: Colors.green.shade100,
+                      imagePath: 'assets/images/eshan/LM7.png',
+                      gradient: LinearGradient(
+                        colors: [Colors.green.shade50, Colors.green.shade100],
+                      ),
+                      onTap: () => _navigateTo(context, const LandDetailsScreen()),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
+  void _navigateTo(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChildPageWrapper(child: page),
+      ),
+    );
+  }
+
   Widget _buildCard({
+    required BuildContext context,
     required String title,
     required Color color,
     required String imagePath,
     required Gradient gradient,
-    required Function()? onTap,
+    required VoidCallback onTap,
   }) {
     return Container(
       width: double.infinity,
-      height: 180,
+      constraints: const BoxConstraints(minHeight: 120, maxHeight: 180),
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(16),
@@ -93,33 +100,26 @@ class LandMainScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(12.0),
             child: Row(
               children: [
-                SizedBox(
-                  width: 160,
-                  height: 160,
-                  child: Center(
-                    child: Image.asset(
-                      imagePath,
-                      width: 160,
-                      height: 160,
-                      fit: BoxFit.contain,
-                    ),
+                Expanded(
+                  flex: 2,
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.contain,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 12),
                 Expanded(
-                  child: Center(
-                    child: Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey[800],
-                        fontWeight: FontWeight.w600,
-                        height: 1.5,
-                      ),
+                  flex: 3,
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.grey[800],
+                      fontWeight: FontWeight.w600,
+                      height: 1.3,
                     ),
                   ),
                 ),
@@ -131,3 +131,4 @@ class LandMainScreen extends StatelessWidget {
     );
   }
 }
+

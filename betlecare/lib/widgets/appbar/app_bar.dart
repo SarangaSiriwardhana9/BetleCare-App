@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BasicAppbar extends StatelessWidget implements PreferredSizeWidget {
-  const BasicAppbar({super.key});
+  final String? title;
+
+  const BasicAppbar({super.key, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,21 @@ class BasicAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
+      title: title != null
+          ? Text(
+        title!,
+        style: TextStyle(
+          color: Colors.green[800],
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
+      )
+          : null,
+      centerTitle: true,
     );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
+

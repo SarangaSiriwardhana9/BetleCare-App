@@ -70,6 +70,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/images/google_logo.png
     - assets/images/profile.png
     - assets/images/eshan/LM1.png
@@ -78,7 +79,9 @@ flutter:
     - assets/images/eshan/LM4.png
     - assets/images/eshan/LM5.png
     - assets/images/eshan/LM6.png
+    - assets/images/eshan/LM7.png
     - assets/images/market/
+    - assets/images/weather/weather2.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

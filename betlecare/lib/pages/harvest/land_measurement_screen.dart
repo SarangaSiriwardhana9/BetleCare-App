@@ -18,6 +18,10 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
   final Set<Polyline> _polylines = {};
   bool _isRecording = false;
   StreamSubscription<Position>? _positionStreamSubscription;
+  double? _area;
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   @override
   void initState() {
@@ -27,6 +31,15 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    _positionStreamSubscription?.cancel();
+    _mapController?.dispose();
+    _nameController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
+
   Future<void> _checkLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -34,7 +47,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location services are disabled. Please enable the services')),
+        const SnackBar(content: Text('ස්ථාන සේවා අක්රිය කර ඇත. කරුණාකර සේවාවන් සක්රිය කරන්න')),
       );
       return;
     }
@@ -44,7 +57,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location permissions are denied')),
+          const SnackBar(content: Text('ස්ථාන අවසර ප්රතික්ෂේප කර ඇත')),
         );
         return;
       }
@@ -52,19 +65,18 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
 
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')),
+        const SnackBar(content: Text('ස්ථාන අවසර ස්ථිරවම ප්රතික්ෂේප කර ඇත, අපට අවසර ඉල්ලීමට නොහැක.')),
       );
       return;
     }
 
-    // Permission granted, get initial position
     try {
       Position position = await Geolocator.getCurrentPosition();
       _updateCameraPosition(position);
     } catch (e) {
-      print("Error getting current position: $e");
+      print("වත්මන් ස්ථානය ලබා ගැනීමේ දෝෂයක්: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to get current location. Please try again.')),
+        const SnackBar(content: Text('වත්මන් ස්ථානය ලබා ගැනීමට අසමත් විය. කරුණාකර නැවත උත්සාහ කරන්න.')),
       );
     }
   }
@@ -86,6 +98,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
       _polygonPoints.clear();
       _polygons.clear();
       _polylines.clear();
+      _area = null;
     });
 
     _positionStreamSubscription = Geolocator.getPositionStream(
@@ -137,7 +150,7 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
   void _calculateArea() {
     if (_polygonPoints.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Not enough points to calculate area. Please walk around the entire perimeter.')),
+        const SnackBar(content: Text('වර්ගඵලය ගණනය කිරීමට ප්රමාණවත් ලක්ෂ නැත. කරුණාකර සම්පූර්ණ ඉඩම වටා ඇවිදින්න.')),
       );
       return;
     }
@@ -148,20 +161,68 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
       area += (_polygonPoints[i].latitude * _polygonPoints[j].longitude) -
           (_polygonPoints[j].latitude * _polygonPoints[i].longitude);
     }
-    area = (area.abs() * 111319.9 * 111319.9) / 2; // Convert to square meters
+    area = (area.abs() * 111319.9 * 111319.9) / 2;
+    double areaInAcres = area * 0.000247105;
+
+    setState(() {
+      _area = areaInAcres;
+    });
+
+    _showSaveModal();
+  }
+
+  void _showSaveModal() {
+    if (_area == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('කරුණාකර පළමුව වර්ගඵලය ගණනය කරන්න.')),
+      );
+      return;
+    }
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Land Area'),
-        content: Text('The measured land area is approximately ${area.toStringAsFixed(2)} square meters.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('ඉඩම් මැනුම් සුරකින්න'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'ඉඩමේ නම'),
+                ),
+                TextField(
+                  controller: _locationController,
+                  decoration: const InputDecoration(labelText: 'ස්ථානය'),
+                ),
+                const SizedBox(height: 16),
+                Text('වර්ගඵලය: ${_area!.toStringAsFixed(2)} අක්කර'),
+              ],
+            ),
           ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              child: const Text('අවලංගු කරන්න'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('සුරකින්න'),
+              onPressed: () {
+                // TODO: Implement saving logic
+                print('ඉඩමේ නම: ${_nameController.text}');
+                print('ස්ථානය: ${_locationController.text}');
+                print('වර්ගඵලය: ${_area!.toStringAsFixed(2)} අක්කර');
+                Navigator.of(context).pop();
+                // Optionally, navigate back to the land details screen
+                // Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -169,16 +230,35 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BasicAppbar(),
-      body: GoogleMap(
-        onMapCreated: (controller) => _mapController = controller,
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(0, 0),
-          zoom: 18,
-        ),
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-        polygons: _polygons,
-        polylines: _polylines,
+      body: Stack(
+        children: [
+          GoogleMap(
+            onMapCreated: (controller) => _mapController = controller,
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(0, 0),
+              zoom: 18,
+            ),
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            polygons: _polygons,
+            polylines: _polylines,
+          ),
+          if (_area != null)
+            Positioned(
+              bottom: 16,
+              left: 16,
+              right: 72,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'ගණනය කළ වර්ගඵලය: ${_area!.toStringAsFixed(2)} අක්කර',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(left: 20.0, bottom: 100.0),
@@ -188,20 +268,22 @@ class _LandMeasurementScreenState extends State<LandMeasurementScreen> {
             FloatingActionButton(
               onPressed: _isRecording ? _stopRecording : _startRecording,
               backgroundColor: (_isRecording ? Colors.red[100]! : Colors.green[100]!),
-              heroTag: Text(_isRecording ? 'Stop' : 'Start'),
+              heroTag: 'recordToggle',
               child: Icon(_isRecording ? Icons.stop : Icons.play_arrow),
+              tooltip: _isRecording ? 'නවත්වන්න' : 'ආරම්භ කරන්න',
             ),
+            const SizedBox(height: 16),
+            if (!_isRecording && _area != null)
+              FloatingActionButton(
+                onPressed: _showSaveModal,
+                backgroundColor: Colors.orange[100]!,
+                heroTag: 'save',
+                child: const Icon(Icons.save),
+                tooltip: 'සුරකින්න',
+              ),
           ],
         ),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _positionStreamSubscription?.cancel();
-    _mapController?.dispose();
-    super.dispose();
-  }
 }
-
