@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/bottom_nav_bar.dart';
 import '../../widgets/profile_header.dart';
-import '../../widgets/weather/weather_display_card.dart';   
+import '../../widgets/weather/weather_display_card.dart';
 import 'weather_screen_1.dart';
 import 'weather_screen_2.dart';
 import 'weather_screen_3.dart';
@@ -17,11 +17,11 @@ class WeatherScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Replace first card with WeatherDisplayCard
+            //  WeatherDisplayCard
             const WeatherDisplayCard(),
             const SizedBox(height: 16),
             _buildCard(
-              title: 'සති අන්ත කාලගුණ\nඅනාවැකිය',
+              title: 'ඉදිරි සතියේ \nකාලගුණ තත්වය',
               color: Colors.purple.shade100,
               imagePath: 'assets/images/weather/weather2.png',
               gradient: LinearGradient(
@@ -34,47 +34,8 @@ class WeatherScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(child: const WeatherScreen2()),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildCard(
-              title: 'මාසික කාලගුණ\nඅනාවැකිය',
-              color: Colors.orange.shade100,
-              imagePath: 'assets/images/weather/weather3.png',
-              gradient: LinearGradient(
-                colors: [
-                  Colors.orange.shade50,
-                  Colors.orange.shade100,
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(child: const WeatherScreen3()),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildCard(
-              title: 'කාලගුණ\nසාරාංශය',
-              color: Colors.teal.shade100,
-              imagePath: 'assets/images/weather/weather4.png',
-              gradient: LinearGradient(
-                colors: [
-                  Colors.teal.shade50,
-                  Colors.teal.shade100,
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(child: const WeatherScreen4()),
+                    builder: (context) =>
+                        ChildPageWrapper(child: const WeatherScreen2()),
                   ),
                 );
               },

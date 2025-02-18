@@ -1,3 +1,4 @@
+import 'package:betlecare/pages/weather/more_weather_data.dart';
 import 'package:flutter/material.dart';
 
 class WeatherDisplayCard extends StatelessWidget {
@@ -51,8 +52,15 @@ class WeatherDisplayCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {},
+         ElevatedButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MoreWeatherData(),
+      ),
+    );
+  },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
