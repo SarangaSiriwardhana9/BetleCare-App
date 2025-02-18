@@ -1,6 +1,7 @@
 import 'package:betlecare/pages/market/a_market_screen.dart';
 import 'package:betlecare/pages/sidebar_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:betlecare/pages/harvest/harvest_screen.dart';
 import 'package:betlecare/pages/home_screen.dart';
@@ -11,9 +12,14 @@ import 'package:betlecare/widgets/profile_header.dart';
 import 'package:betlecare/pages/login_page.dart';
 import 'package:betlecare/pages/signup_page.dart';
 import 'package:betlecare/supabase_client.dart';
+ 
 import 'package:line_icons/line_icons.dart';
 import 'package:betlecare/pages/weather/weather_screen.dart';
+ 
+
+ 
 void main() async {
+  await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseClientManager.instance;
   runApp(const MyApp());

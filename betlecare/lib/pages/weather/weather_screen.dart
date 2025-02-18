@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/bottom_nav_bar.dart';
 import '../../widgets/profile_header.dart';
+import '../../widgets/weather/weather_display_card.dart';  // Add this import
 import 'weather_screen_1.dart';
 import 'weather_screen_2.dart';
 import 'weather_screen_3.dart';
@@ -16,25 +17,8 @@ class WeatherScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            _buildCard(
-              title: 'දෛනික කාලගුණ\nඅනාවැකිය',
-              color: Colors.blue.shade100,
-              imagePath: 'assets/images/weather/weather1.png',
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue.shade50,
-                  Colors.blue.shade100,
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChildPageWrapper(child: const WeatherScreen1()),
-                  ),
-                );
-              },
-            ),
+            // Replace first card with WeatherDisplayCard
+            const WeatherDisplayCard(),
             const SizedBox(height: 16),
             _buildCard(
               title: 'සති අන්ත කාලගුණ\nඅනාවැකිය',

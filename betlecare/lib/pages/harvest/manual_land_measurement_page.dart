@@ -1,11 +1,12 @@
-import 'package:betlecare/widgets/appbar/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 
+import '../../widgets/appbar/app_bar.dart';
+
 class ManualLandMeasurementPage extends StatefulWidget {
-  const ManualLandMeasurementPage({super.key});
+  const ManualLandMeasurementPage({Key? key}) : super(key: key);
 
   @override
   _ManualLandMeasurementPageState createState() => _ManualLandMeasurementPageState();
@@ -21,85 +22,34 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
   double? _area;
   LatLng? _currentLocation;
 
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _getUserLocation();
   }
 
-  Future<void> _getUserLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location services are disabled. Please enable the services')),
-      );
-      return;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location permissions are denied')),
-        );
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')),
-      );
-      return;
-    }
-
-    Position position = await Geolocator.getCurrentPosition();
-    _currentLocation = LatLng(position.latitude, position.longitude);
-
-    if (_mapController != null) {
-      _mapController?.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: _currentLocation!,
-            zoom: 18,
-          ),
-        ),
-      );
-    }
-
-    setState(() {});
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _locationController.dispose();
+    super.dispose();
   }
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
-    if (_currentLocation != null) {
-      _mapController?.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: _currentLocation!,
-            zoom: 18,
-          ),
-        ),
-      );
-    }
   }
 
-  void _addMarker(LatLng pos) {
-    final String markerIdVal = 'marker_$_markerIdCounter';
-    _markerIdCounter++;
-
+  void _addMarker(LatLng point) {
     setState(() {
-      _markers.add(
-        Marker(
-          markerId: MarkerId(markerIdVal),
-          position: pos,
-        ),
-      );
-      _polygonPoints.add(pos);
+      _markers.add(Marker(
+        markerId: MarkerId('marker_$_markerIdCounter'),
+        position: point,
+      ));
+      _markerIdCounter++;
+      _polygonPoints.add(point);
       _updatePolygon();
     });
   }
@@ -111,8 +61,8 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
         polygonId: PolygonId('polygon_$_polygonIdCounter'),
         points: _polygonPoints,
         strokeWidth: 2,
-        strokeColor: Colors.red,
-        fillColor: Colors.red.withOpacity(0.15),
+        strokeColor: Colors.blue,
+        fillColor: Colors.blue.withOpacity(0.1),
       ));
     });
   }
@@ -120,7 +70,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
   void _calculateArea() {
     if (_polygonPoints.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select at least 3 points to calculate the area.')),
+        const SnackBar(content: Text('කරුණාකර ඉඩම් මැනීම ගණනය කිරීමට අවම වශයෙන් ලක්ෂ්‍ය 3 ක් එක් කරන්න.')),
       );
       return;
     }
@@ -131,9 +81,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
       area += (_polygonPoints[i].latitude * _polygonPoints[j].longitude) -
           (_polygonPoints[j].latitude * _polygonPoints[i].longitude);
     }
-    area = (area.abs() * 111319.9 * 111319.9) / 2; // Convert to square meters
-    //convert in to acres
-    area = area / 4046.86;
+    area = (area.abs() / 2) * 111319.9 * 111319.9 * 0.000247105; // Convert to acres
 
     setState(() {
       _area = area;
@@ -145,14 +93,101 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
       _markers.clear();
       _polygons.clear();
       _polygonPoints.clear();
+      _markerIdCounter = 1;
       _area = null;
     });
+  }
+
+  Future<void> _getUserLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return;
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+    setState(() {
+      _currentLocation = LatLng(position.latitude, position.longitude);
+    });
+
+    if (_mapController != null) {
+      _mapController!.animateCamera(CameraUpdate.newLatLng(_currentLocation!));
+    }
+  }
+
+  void _showSaveModal() {
+    if (_area == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('කරුණාකර පළමුව ඉඩම් මැනීම කරන්න.')),
+      );
+      return;
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('ඉඩම් මැනුම් සුරකින්න'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'ඉඩමේ නම'),
+                ),
+                TextField(
+                  controller: _locationController,
+                  decoration: const InputDecoration(labelText: 'ස්ථානය'),
+                ),
+                const SizedBox(height: 16),
+                Text('වර්ගඵලය: ${_area!.toStringAsFixed(2)} අක්කර'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('අවලංගු කරන්න'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('සුරකින්න'),
+              onPressed: () {
+                // TODO: Implement saving logic
+                print('ඉඩමේ නම: ${_nameController.text}');
+                print('ස්ථානය: ${_locationController.text}');
+                print('වර්ගඵලය: ${_area!.toStringAsFixed(2)} අක්කර');
+                Navigator.of(context).pop();
+                // Optionally, navigate back to the land details screen
+                // Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppbar(),
+      appBar: BasicAppbar(),
       body: Stack(
         children: [
           GoogleMap(
@@ -170,13 +205,13 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
           Positioned(
             bottom: 16,
             left: 16,
-            right: 72, // Adjusted to make space for FABs
+            right: 72,
             child: _area != null
                 ? Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Calculated Area: ${_area!.toStringAsFixed(2)} Acres',
+                  'ගණනය කළ ඉඩම් මැනීම: ${_area!.toStringAsFixed(2)} අක්කර',
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -195,6 +230,7 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
               backgroundColor: Colors.blue[100]!,
               heroTag: 'calculate',
               child: const Icon(Icons.calculate),
+              tooltip: 'වර්ගඵලය ගණනය කරන්න',
             ),
             const SizedBox(height: 16),
             FloatingActionButton(
@@ -202,6 +238,15 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
               backgroundColor: Colors.green[100]!,
               heroTag: 'reset',
               child: const Icon(Icons.refresh),
+              tooltip: 'නැවත සකසන්න',
+            ),
+            const SizedBox(height: 16),
+            FloatingActionButton(
+              onPressed: _showSaveModal,
+              backgroundColor: Colors.orange[100]!,
+              heroTag: 'save',
+              child: const Icon(Icons.save),
+              tooltip: 'සුරකින්න',
             ),
           ],
         ),
@@ -209,4 +254,3 @@ class _ManualLandMeasurementPageState extends State<ManualLandMeasurementPage> {
     );
   }
 }
-
