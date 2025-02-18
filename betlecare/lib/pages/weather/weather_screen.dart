@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/bottom_nav_bar.dart';
 import '../../widgets/profile_header.dart';
-import '../../widgets/weather/weather_display_card.dart';  // Add this import
+import '../../widgets/weather/weather_display_card.dart';   
 import 'weather_screen_1.dart';
 import 'weather_screen_2.dart';
 import 'weather_screen_3.dart';
