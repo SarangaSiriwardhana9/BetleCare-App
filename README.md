@@ -6,6 +6,11 @@
 [![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://android.com)
 
+
+## 📺 Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/vjVo22uMZ9g/0.jpg)](https://www.youtube.com/watch?v=vjVo22uMZ9g)
+
 ## Overview
 
 BetelCare is a comprehensive Flutter mobile application developed as an innovative research project at Sri Lanka Institute of Information Technology (SLIIT). Designed specifically for Sri Lankan betel farmers, this research initiative addresses critical technological gaps in precision agriculture by integrating advanced machine learning capabilities with traditional farming knowledge to provide intelligent agricultural solutions across Kurunegala, Puttalam, and Anamaduwa regions.
