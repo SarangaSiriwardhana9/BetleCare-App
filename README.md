@@ -9,7 +9,8 @@
 
 ## 📺 Demo Video
 
-[![Watch the demo](https://img.youtube.com/vi/vjVo22uMZ9g/0.jpg)](https://www.youtube.com/watch?v=vjVo22uMZ9g)
+[![Watch the demo](https://img.youtube.com/vi/vjVo22uMZ9g/maxresdefault.jpg)](https://www.youtube.com/watch?v=vjVo22uMZ9g)
+
 
 ## Overview
 
